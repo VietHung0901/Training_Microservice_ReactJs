@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping()
-    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createProduct(@ModelAttribute ProductDTO productDTO) {
         try {
             productService.createProduct(productDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new RequestResponse("Tạo product thành công!"));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new RequestResponse("Tạo product thành công!"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse("Lỗi khi tạo product: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ExceptionResponse("Lỗi khi tạo product: " + e.getMessage()));
         }
     }
 
@@ -41,8 +44,11 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @RequestBody ProductDTO productDTO) {
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<?> updateProduct(@PathVariable("id") int id, @ModelAttribute ProductDTO productDTO) {
         try {
             Product response = productService.getProductById(id);
             productService.updateProduct(id, productDTO);

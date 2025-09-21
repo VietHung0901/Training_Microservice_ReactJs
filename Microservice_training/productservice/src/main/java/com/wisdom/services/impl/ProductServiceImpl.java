@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(productDTO.getDescription());
 
         try {
-            product.setImagepath(generalService.saveFile(productDTO.getImagepath(), "images"));
+            product.setImagepath(generalService.saveFile(productDTO.getImagepath(), "products"));
         } catch (IOException e) {
             throw new RuntimeException("Lỗi khi lưu file ảnh: " + e.getMessage(), e);
         }
